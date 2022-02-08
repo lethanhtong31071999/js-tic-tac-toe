@@ -4,7 +4,7 @@ import {
   getCurrentTurnElement,
   getGameStatusElement,
 } from "./selectors.js";
-
+import { checkGameStatus } from "./utils.js";
 import { TURN } from "./constants.js";
 
 /**
@@ -42,7 +42,8 @@ function toggleTurn() {
 }
 
 function handleCellClick(cellElement, index) {
-  console.log(cellElement, index);
+  console.log("check");
+
   // isMark
   if (
     cellElement.classList.contains(TURN.CIRCLE) ||
@@ -54,6 +55,9 @@ function handleCellClick(cellElement, index) {
 
   // Toggle turn
   toggleTurn();
+
+  // Check status
+  //   checkGameStatus([]);
 }
 
 function initCellElmentList() {

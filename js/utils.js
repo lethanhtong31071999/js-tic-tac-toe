@@ -37,10 +37,11 @@
 
 // Input: an array of 9 items
 // Output: an object as mentioned above
+
+import { GAME_STATUS } from "./constants";
+
 export function checkGameStatus(cellValues) {
-  // Write your code here ...
-  // Please feel free to add more helper function if you want.
-  // It's not required to write everything just in this function.
+  if (!Array.isArray(cellValues) || cellValues.length !== 9) return;
 
   return {
     status: GAME_STATUS.PLAYING,
