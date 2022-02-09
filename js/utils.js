@@ -38,13 +38,48 @@
 // Input: an array of 9 items
 // Output: an object as mentioned above
 
-import { GAME_STATUS } from "./constants";
+import { GAME_STATUS, CELL_VALUE } from "./constants.js";
 
 export function checkGameStatus(cellValues) {
   if (!Array.isArray(cellValues) || cellValues.length !== 9) return;
 
+  // All cases to win
+  const checkSetList = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+
+  const winSetIndex = checkSetList.findIndex((set) => {
+    const first = cellValues[set[0]];
+    const second = cellValues[set[1]];
+    const third = cellValues[set[2]];
+
+    return first !== "" && first === second && first === third;
+  });
+
+  // WIN
+  if (winSetIndex > -1) {
+    const winValue = cellValues[checkSetList[winSetIndex][1]];
+
+    return {
+      winPositions: checkSetList[winSetIndex],
+      status:
+        winValue === CELL_VALUE.CIRCLE ? GAME_STATUS.O_WIN : GAME_STATUS.X_WIN,
+    };
+  }
+
+  // END GAME - Playing
+  const isEndGame = cellValues.filter((cell) => cell === "").length === 0;
   return {
-    status: GAME_STATUS.PLAYING,
+    status: isEndGame ? GAME_STATUS.ENDED : GAME_STATUS.PLAYING,
     winPositions: [],
   };
 }

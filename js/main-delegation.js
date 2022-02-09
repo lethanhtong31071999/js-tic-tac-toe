@@ -4,6 +4,7 @@ import {
   getCurrentTurnElement,
   getGameStatusElement,
   getReplayBtnElement,
+  getCellUlElement,
 } from "./selectors.js";
 import { checkGameStatus } from "./utils.js";
 import { CELL_VALUE, GAME_STATUS, TURN } from "./constants.js";
@@ -75,7 +76,7 @@ function highlightWinCells(winPositionList) {
   }
 }
 
-function handleCellClick(cellElement, index, markList) {
+function handleCellClick(cellElement, index) {
   const clicked =
     cellElement.classList.contains(TURN.CIRCLE) ||
     cellElement.classList.contains(TURN.CROSS);
@@ -85,10 +86,10 @@ function handleCellClick(cellElement, index, markList) {
   cellElement.classList.add(currentTurn);
 
   // Mark in Array
-  markList[index] =
+  cellValues[index] =
     currentTurn === TURN.CIRCLE ? CELL_VALUE.CIRCLE : CELL_VALUE.CROSS;
   // Check status
-  const game = checkGameStatus(markList);
+  const game = checkGameStatus(cellValues);
 
   switch (game?.status) {
     case GAME_STATUS.PLAYING: {
@@ -134,13 +135,20 @@ function handleReplayClick() {
   updateGameStatus(GAME_STATUS.PLAYING);
 }
 
-function initCellElmentList(markList) {
-  // bind Cell click
+function initCellElmentList() {
   const cellElementList = getCellElementList();
+  if (!cellElementList) return;
   cellElementList.forEach((cell, index) => {
-    cell.addEventListener("click", () =>
-      handleCellClick(cell, index, markList)
-    );
+    cell.dataset.idx = index;
+  });
+
+  // bind Cell click
+  const ulElement = getCellUlElement();
+  if (!ulElement) throw new Error("Cannot get Ul Element");
+  ulElement.addEventListener("click", (e) => {
+    const liClicked = e.target;
+    const index = e.target.dataset.idx;
+    handleCellClick(e.target, index);
   });
 
   // bind replay button click
@@ -153,5 +161,5 @@ function initCellElmentList(markList) {
 
 (() => {
   // bind click event for all li elements
-  initCellElmentList(cellValues);
+  initCellElmentList();
 })();

@@ -12,9 +12,17 @@ export function getCurrentTurnElement() {
 }
 
 export function getCellElementAtIdx(index) {
-  return document.querySelector(`#cellList > li:nth-child(${index})`);
+  return document.querySelector(`#cellList > li:nth-child(${index + 1})`);
 }
 
 export function getGameStatusElement() {
   return document.getElementById("gameStatus");
+}
+
+export function getReplayBtnElement() {
+  return document.getElementById("replayGame");
+}
+
+export function getCellUlElement() {
+  return document.getElementById("cellList");
 }
